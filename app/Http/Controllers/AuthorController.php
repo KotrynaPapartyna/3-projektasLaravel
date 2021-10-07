@@ -34,7 +34,7 @@ class AuthorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request) // atsakinga uz duomenu paemima is formos ir irasyma i DB
     {
         $author=new Author;
 
@@ -55,9 +55,9 @@ class AuthorController extends Controller
      * @param  \App\Models\Author  $author
      * @return \Illuminate\Http\Response
      */
-    public function show(Author $author) // atsakinga uz duomenu paemima is formos ir irasyma i DB
+    public function show(Author $author)
     {
-        //
+        return view ("author.show", ["author"=>$author]);
     }
 
     /**
@@ -80,7 +80,17 @@ class AuthorController extends Controller
      */
     public function update(Request $request, Author $author) // atsakinga uz atnaujinima DB
     {
-        //
+
+        // DB stulpelio pavadinimas  =   input laukelio vardas kaip formoje
+        $author->name=$request->author_name; // I STULPELI IRASO NAUJUS DUOMENIS
+        $author->surname=$request->author_surname; // I STULPELI IRASO NAUJUS DUOMENIS
+        $author->username=$request->author_username; // I STULPELI IRASO NAUJUS DUOMENIS
+
+        $author->save(); // JAU ISSAUGO UPDATINTUS DUOMENIS
+
+        // -> grazina i kelia- t.y. psl i kur
+        return redirect()->route("author.index"); // kai visi duomenys isiraso, grazina i pradini psl
+
     }
 
     /**
@@ -91,6 +101,7 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
-        //
+        $author->delete();
+        return redirect()->route("author.index");
     }
 }
